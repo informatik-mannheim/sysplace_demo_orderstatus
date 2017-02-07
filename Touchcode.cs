@@ -8,6 +8,7 @@ namespace TangibleTouch
 	/// </summary>
 	public class Touchcode
 	{
+
 		/// <summary>
 		/// 
 		/// </summary>

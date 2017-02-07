@@ -22,6 +22,8 @@ namespace WpfTouchFrameSample
 		
 		private Canvas _canvas;
 
+        private Touchcode touchcodeCache;
+
 		public MainWindow()
 		{
 			InitializeComponent();
@@ -61,13 +63,34 @@ namespace WpfTouchFrameSample
 
 			_capturedTouchDevices.Add(e.TouchDevice);
 			_currentTouchcode = _touchcodeAPI.Check(GetTouchpoints());
+            Console.WriteLine("DEBUG_TOUCHCODE: " + _currentTouchcode.ToString());
 			
 			Redraw();
+
+            // Post the currenct touch code
+            // Cache the touch code. Post only if there is a new touch code.
+            if (_currentTouchcode != touchcodeCache)
+            {
+                touchcodeCache = _currentTouchcode;
+                // TODO: What value (type) will be sent to the particle service?
+                _touchcodeAPI.postTouchcode(_currentTouchcode.ToString());
+                
+            }
+            
 		}
 
 		void OnTouchMove(object sender, TouchEventArgs e)
 		{
 			_currentTouchcode = _touchcodeAPI.Check(GetTouchpoints());
+
+            // Post the currenct touch code
+            // Cache the touch code. Post only if there is a new touch code.
+            if (_currentTouchcode != touchcodeCache)
+            {
+                touchcodeCache = _currentTouchcode;
+                // TODO: What value (type) will be sent to the particle service?
+                _touchcodeAPI.postTouchcode(_currentTouchcode.ToString());
+            }
 
 			Redraw();
 		}
@@ -78,6 +101,9 @@ namespace WpfTouchFrameSample
 
 			_capturedTouchDevices.RemoveAll(td => td == e.TouchDevice);
 			_currentTouchcode = _touchcodeAPI.Check(GetTouchpoints());
+
+            // Post the currenct touch code
+            _touchcodeAPI.postTouchcode(_currentTouchcode.ToString());
 
 			Redraw();
 		}
