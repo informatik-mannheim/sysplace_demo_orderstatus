@@ -22,7 +22,8 @@ namespace WpfTouchFrameSample
 		
 		private Canvas _canvas;
 
-        private Touchcode touchcodeCache;
+		private Touchcode touchcodeCache;
+		private Boolean _touchcodeWasSent = false;
 
 		public MainWindow()
 		{
@@ -63,20 +64,16 @@ namespace WpfTouchFrameSample
 
 			_capturedTouchDevices.Add(e.TouchDevice);
 			_currentTouchcode = _touchcodeAPI.Check(GetTouchpoints());
-            Console.WriteLine("DEBUG_TOUCHCODE: " + _currentTouchcode.ToString());
+			Console.WriteLine("DEBUG_TOUCHCODE_OnTouchDown: " + _currentTouchcode.ToTouchcodeString());
 			
 			Redraw();
 
             // Post the currenct touch code
-            // Cache the touch code. Post only if there is a new touch code.
-            if (_currentTouchcode != touchcodeCache)
-            {
-                touchcodeCache = _currentTouchcode;
-                // TODO: What value (type) will be sent to the particle service?
-                _touchcodeAPI.postTouchcode(_currentTouchcode.ToString());
-                
-            }
-            
+			if (!_currentTouchcode.Equals(Touchcode.None))
+			{
+				_touchcodeAPI.postTouchcode(_currentTouchcode.ToTouchcodeString());
+				_touchcodeWasSent = true;
+			}
 		}
 
 		void OnTouchMove(object sender, TouchEventArgs e)
@@ -85,12 +82,11 @@ namespace WpfTouchFrameSample
 
             // Post the currenct touch code
             // Cache the touch code. Post only if there is a new touch code.
-            if (_currentTouchcode != touchcodeCache)
-            {
-                touchcodeCache = _currentTouchcode;
-                // TODO: What value (type) will be sent to the particle service?
-                _touchcodeAPI.postTouchcode(_currentTouchcode.ToString());
-            }
+			//if (_currentTouchcode != touchcodeCache)
+           //{
+			//touchcodeCache = _currentTouchcode;
+           //_touchcodeAPI.postTouchcode(_currentTouchcode.ToTouchcodeString());
+           //}
 
 			Redraw();
 		}
@@ -101,10 +97,17 @@ namespace WpfTouchFrameSample
 
 			_capturedTouchDevices.RemoveAll(td => td == e.TouchDevice);
 			_currentTouchcode = _touchcodeAPI.Check(GetTouchpoints());
-
-            // Post the currenct touch code
-            _touchcodeAPI.postTouchcode(_currentTouchcode.ToString());
-
+			Console.WriteLine("DEBUG_TOUCHCODE_OnTouchUp: " + _currentTouchcode.ToTouchcodeString());
+            
+			// Post the currenct touch code 
+			if (_touchcodeWasSent)
+			{
+				_touchcodeAPI.postTouchcode(_currentTouchcode.ToTouchcodeString());
+				if (_currentTouchcode.Equals(Touchcode.None))
+				{
+					_touchcodeWasSent = false;
+				}
+			}
 			Redraw();
 		}
 

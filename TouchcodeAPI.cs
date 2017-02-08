@@ -2,7 +2,9 @@
 using MathNet.Spatial.Euclidean;
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Windows.Input;
 
@@ -28,7 +30,7 @@ namespace TangibleTouch
             { new Point2D(2, 0), 0x800 },
         };
 
-        private readonly String PARTICLE_SERVICE = "https://api.particle.io/v1/devices/2b001c000d47343233323032/led?access_token=cbc2be014eff9372905ef00f28c31e4a0784a05c";
+		private readonly String PARTICLE_SERVICE = "https://api.particle.io/v1/devices/290044001747343337363432/led?access_token=cbc2be014eff9372905ef00f28c31e4a0784a05c";
 
         /// <summary>
         /// Checks a list of <see cref="TouchPoint">TouchPoints</see> for the existence of a touchcode. 
@@ -153,16 +155,22 @@ namespace TangibleTouch
         /// <summary>
         /// Posts the current touch code to the particle
         /// </summary>
-        public void postTouchcode(String currentTouchcode)
+        public async void postTouchcode(String currentTouchcode)
         {
             var data = new NameValueCollection();
             data["value"] = currentTouchcode;
 
-            using (var client = new WebClient())
+            using (var client = new HttpClient())
             {
-                var response = client.UploadValues(PARTICLE_SERVICE, data);
+				var values = new Dictionary<string, string>
+				{
+					{"value", currentTouchcode}
+				};
+				var content = new FormUrlEncodedContent(values);
 
-                var responseString = Encoding.Default.GetString(response);
+                var response = await client.PostAsync(PARTICLE_SERVICE, content);
+
+				var responseString = await response.Content.ReadAsStreamAsync();
                 Console.WriteLine("DEBUG_RESPONSESTRING: " + responseString);
             }
         }

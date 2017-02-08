@@ -48,5 +48,10 @@ namespace TangibleTouch
 		{
 			return this == None ? "[None]" : String.Format("0x{0:X} ({1:0.00}°)", Value, Angle);
 		}
+
+		public string ToTouchcodeString()
+		{
+			return this == None ? "None" : String.Format("0x{0:X}", Value);
+		}
 	}
 }
