@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Tangible Touch
 Recognize physical object identities by decoding touch patterns on capacitive screens.
 
@@ -90,3 +91,7 @@ X----X----X----X
 ```
 
 It is important that all pins have the same vertical and horizontal distance so that the system can recognize the grid.
+=======
+# sysplace_demo_orderstatus
+Connecting a Particle.io, a big touchscreen, an android app and a toy car utilizing Touchcodes.
+>>>>>>> 686f9dcd457181e57d50410d1e3ccdefe0624064
