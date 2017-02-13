@@ -10,5 +10,8 @@
         <TextBox x:Name="xaml_touchcode_label" FontSize="30" Margin="10,5,1743.124,1201.757" Background="Transparent"  BorderThickness="0" >>>Touchcode:</TextBox>
         <TextBox x:Name="xaml_touchcode_value" FontSize="30" Margin="389,5,1246.124,1201.757" Width="1920" Background="Transparent" BorderThickness="0">[None]</TextBox>
         <TextBox x:Name="xaml_touchpoints" FontSize="10" Background="Transparent" BorderThickness="0" Height="20" Margin="10,49,-9.876,1201.757" />
+        <TextBox x:Name="xaml_customer" FontSize="10" Background="Transparent" BorderThickness="0" Height="20" Text="[customer]" Margin="10,74,-9.876,1176.757" />
+        <TextBox x:Name="xaml_status" FontSize="10" Background="Transparent" BorderThickness="0" Height="20" Text="[status]" Margin="10,94,-9.876,1156.757"/>
+        <TextBox x:Name="xaml_message" FontSize="10" Background="Transparent" BorderThickness="0" Height="20" Text="[message]" Margin="10,114,-9.876,1136.757"/>
     </Grid>
 </Window>

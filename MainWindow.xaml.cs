@@ -10,6 +10,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using TangibleTouch;
 using Path = System.IO.Path;
+using Newtonsoft.Json.Linq;
 
 namespace WpfTouchFrameSample
 {
@@ -22,7 +23,6 @@ namespace WpfTouchFrameSample
 		
 		private Canvas _canvas;
 
-		private Touchcode touchcodeCache;
 		private Boolean _touchcodeWasSent = false;
 
 		public MainWindow()
@@ -58,6 +58,12 @@ namespace WpfTouchFrameSample
 			}
 		}
 
+		private void resetView() {
+			xaml_customer.Text = "[customer]";
+			xaml_status.Text = "[status]";
+			xaml_message.Text = "[message]";
+		}
+
 		void OnTouchDown(object sender, TouchEventArgs e)
 		{
 			grid.CaptureTouch(e.TouchDevice);
@@ -68,11 +74,49 @@ namespace WpfTouchFrameSample
 			
 			Redraw();
 
-            // Post the currenct touch code
-			if (!_currentTouchcode.Equals(Touchcode.None))
+			if (_currentTouchcode != Touchcode.None)
 			{
-				_touchcodeAPI.postTouchcode(_currentTouchcode.ToTouchcodeString());
-				_touchcodeWasSent = true;
+				// Get information about customer from http://37.61.204.167:8080/string-store/get?key=bestellstatus
+				_touchcodeAPI.GetTouchcodeInformation();
+
+				if (_touchcodeAPI.getHtmlResponse() != null)
+				{
+
+					JObject responseObject = JObject.Parse(_touchcodeAPI.getHtmlResponse());
+
+					if (responseObject != null)
+					{
+
+						foreach (var prop in responseObject)
+						{
+							var value = prop.Value.ToString();
+
+							switch (prop.Key.ToString())
+							{
+								case "customer":
+									xaml_customer.Text = value;
+									break;
+								case "status":
+									xaml_status.Text = value;
+									break;
+								case "message":
+									xaml_message.Text = value;
+									break;
+							}
+						}
+
+						if (responseObject.Property("status").Value.ToString() == "100")
+						{
+							// Post the current touch code
+							if (!_currentTouchcode.Equals(Touchcode.None))
+							{
+								_touchcodeAPI.postTouchcode(_currentTouchcode.ToTouchcodeString());
+								_touchcodeWasSent = true;
+							}
+						}
+
+					}
+				}
 			}
 		}
 
@@ -97,7 +141,7 @@ namespace WpfTouchFrameSample
 
 			_capturedTouchDevices.RemoveAll(td => td == e.TouchDevice);
 			_currentTouchcode = _touchcodeAPI.Check(GetTouchpoints());
-			Console.WriteLine("DEBUG_TOUCHCODE_OnTouchUp: " + _currentTouchcode.ToTouchcodeString());
+			//Console.WriteLine("DEBUG_TOUCHCODE_OnTouchUp: " + _currentTouchcode.ToTouchcodeString());
             
 			// Post the currenct touch code 
 			if (_touchcodeWasSent)
@@ -108,6 +152,10 @@ namespace WpfTouchFrameSample
 					_touchcodeWasSent = false;
 				}
 			}
+
+			// Reset view
+			resetView();
+
 			Redraw();
 		}
 

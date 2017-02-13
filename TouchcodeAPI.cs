@@ -3,7 +3,9 @@ using MathNet.Spatial.Euclidean;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Windows.Input;
@@ -29,6 +31,18 @@ namespace TangibleTouch
             { new Point2D(1, 0), 0x400 },
             { new Point2D(2, 0), 0x800 },
         };
+
+		private string htmlResponse;
+
+		public string getHtmlResponse()
+		{
+			return this.htmlResponse;
+		}
+
+		public void setHtmlResponse(string value)
+		{
+			this.htmlResponse = value;
+		}
 
 		private readonly String PARTICLE_SERVICE = "https://api.particle.io/v1/devices/290044001747343337363432/led?access_token=cbc2be014eff9372905ef00f28c31e4a0784a05c";
 
@@ -154,6 +168,7 @@ namespace TangibleTouch
 
         /// <summary>
         /// Posts the current touch code to the particle
+		/// only if bestellstatus = 100% !
         /// </summary>
         public async void postTouchcode(String currentTouchcode)
         {
@@ -168,12 +183,30 @@ namespace TangibleTouch
 				};
 				var content = new FormUrlEncodedContent(values);
 
-                var response = await client.PostAsync(PARTICLE_SERVICE, content);
+				var response = await client.PostAsync(PARTICLE_SERVICE, content);
 
 				var responseString = await response.Content.ReadAsStreamAsync();
-                Console.WriteLine("DEBUG_RESPONSESTRING: " + responseString);
             }
         }
+
+		public async void GetTouchcodeInformation()
+		{
+			string html = string.Empty;
+			string url = @"http://37.61.204.167:8080/string-store/get?key=bestellstatus";
+
+			HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+			request.AutomaticDecompression = DecompressionMethods.GZip;
+
+			HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+			Stream stream = response.GetResponseStream();
+			StreamReader reader = new StreamReader(stream);
+			{
+				html = reader.ReadToEnd();
+			}
+
+			this.setHtmlResponse(html);
+		}
+
     }
 
     internal static class ExtensionMethods
