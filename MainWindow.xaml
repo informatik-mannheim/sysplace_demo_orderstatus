@@ -5,19 +5,19 @@
         FontFamily ="Calibri Light"
         KeyDown="OnKeyDown">
 
-    <Grid x:Name="grid" TouchMove="OnTouchMove" TouchDown="OnTouchDown" TouchUp="OnTouchUp" Width="59.77265033600158cm" Height="33.6221158140009cm" Background="DarkGray">
+    <Grid x:Name="grid" TouchMove="OnTouchMove" TouchDown="OnTouchDown" TouchUp="OnTouchUp" Width="59.77265033600158cm" Height="33.6221158140009cm" Background="WhiteSmoke">
         <Canvas x:Name="canvas" Background="Transparent" Panel.ZIndex="1000" Margin="10,0,-9.876,-0.243" />
-        <TextBox FontSize="60" Background="Transparent" Margin="10,5,0,0">Willkommen </TextBox>
-        <TextBox x:Name="xaml_customer" FontSize="60" Foreground="Gray" Background="Transparent" BorderThickness="0" Text="[customer]" Margin="340,5,0,0" />
-        
-        <TextBox FontSize="40" Background="Transparent" Margin="10,80,0,0">Der Bestellstatus Ihres Traumautos liegt bei </TextBox>
-        <TextBox x:Name="xaml_status" FontSize="40" Foreground="Gray" Background="Transparent" BorderThickness="0" Text="[status]" Margin="720,80,0,0"/>
+        <TextBox FontSize="60" BorderThickness="0" Background="Transparent" Margin="10,5,0,0">Willkommen </TextBox>
+        <TextBox x:Name="xaml_customer" FontSize="60" Foreground="DarkGray" Background="Transparent" BorderThickness="0" Text="[customer]" Margin="340,5,0,0" />
 
-        <TextBox x:Name="xaml_message" FontSize="30" Background="Transparent" Foreground="Gray" BorderThickness="0" Text="[message]" Margin="10,171,0,0"/>
+        <TextBox FontSize="40" Background="Transparent" BorderThickness="0" Margin="10,80,0,0">Der Bestellstatus Ihres Traumautos liegt bei </TextBox>
+        <TextBox x:Name="xaml_status" FontSize="40" Foreground="DarkGray" Background="Transparent" BorderThickness="0" Text="[status]" Margin="720,80,0,0"/>
 
-        <TextBox x:Name="xaml_touchcode_label" FontSize="30" Margin="10,600,0,0" Background="Transparent"  BorderThickness="0" >>>Touchcode:</TextBox>
-        <TextBox x:Name="xaml_touchcode_value" FontSize="30" Margin="200,600,0,0" Background="Transparent" BorderThickness="0">[None]</TextBox>
-        <TextBox x:Name="xaml_touchpoints" FontSize="20" Background="Transparent" BorderThickness="0" Margin="10,650,0,0" />
+        <TextBox x:Name="xaml_message" FontSize="30" Background="Transparent" BorderThickness="0" TextWrapping="Wrap" Height="Auto" Foreground="Gray" Text="[message]" Margin="14,201,1500,900"></TextBox>
+       
+        <TextBox x:Name="xaml_touchcode_label" FontSize="30" Foreground="Black" Margin="10,600,0,0" Background="Transparent"  BorderThickness="0" >>>Touchcode:</TextBox>
+        <TextBox x:Name="xaml_touchcode_value" FontSize="30" Foreground="Black" Margin="200,600,0,0" Background="Transparent" BorderThickness="0">[None]</TextBox>
+        <TextBox x:Name="xaml_touchpoints" FontSize="20" Foreground="Black" Background="Transparent" BorderThickness="0" Margin="10,650,0,0" />
             
     </Grid>
 </Window>

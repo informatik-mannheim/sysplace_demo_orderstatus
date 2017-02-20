@@ -33,31 +33,15 @@ namespace WpfTouchFrameSample
 			_currentTouchcode = Touchcode.None;
 			_canvas = CreateTouchcodeVisualization();
 			
-			canvas.Children.Add(_canvas);
-
 			Redraw();
 		}
 
 		private void Redraw()
 		{
-			RenderTouchcodeVisualization();
 			xaml_touchpoints.Text = String.Format("{0} TouchPoints @ {1}", _capturedTouchDevices.Count, _touchcodeAPI.Serialize(GetTouchpoints()));
 			xaml_touchcode_value.Text = _currentTouchcode.ToString();
 		}
-
-		private void RenderTouchcodeVisualization()
-		{
-			for (int i = 0; i < 12; i++)
-			{
-				_canvas.Children[i].Visibility = (_currentTouchcode.Value & 1 << i) == 1 << i ? Visibility.Visible : Visibility.Hidden;
-			}
-
-			if (_currentTouchcode != Touchcode.None)
-			{
-				_canvas.RenderTransform = new RotateTransform(_currentTouchcode.Angle, 1800, 150);
-			}
-		}
-
+		
 		private void resetView() {
 			xaml_customer.Text = "[customer]";
 			xaml_status.Text = "[status]";
